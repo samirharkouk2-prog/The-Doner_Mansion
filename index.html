@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Döner Mansion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #D4AF37;
+            --bistro-green: #E2F183;
+            --pure-white: #FFFFFF;
+            --soft-grey: #F9F9F9;
+            --text-dark: #1F1F1F;
+            --text-light: #666666;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.7;
+            color: var(--pure-white);
+            background-color: #000000;
+            overflow-x: hidden;
+        }
+
+        .bg-animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: none;
+        }
+
+        .bg-overlay {
+            display: none; /* Completely remove overlay */
+        }
+
+        h1, h2, h3, h4, .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Navigation */
+        header {
+            background: #FFFFFF;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            height: 70px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--primary-gold);
+            white-space: nowrap;
+        }
+
+        nav {
+            display: flex;
+            gap: 40px;
+            margin-left: auto;
+        }
+
+        nav a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: var(--transition);
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-gold);
+        }
+
+        /* Hero Section Original Styles */
+        #home {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            color: var(--text-dark);
+            margin-top: 90px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            display: none; /* Rely on global background */
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            margin-bottom: 20px;
+            font-weight: 900;
+            color: var(--pure-white);
+            line-height: 1.1;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            color: var(--pure-white);
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-rounded {
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-gold);
+            color: #000000;
+            border: 2px solid var(--primary-gold);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--primary-gold);
+        }
+
+        .btn-secondary {
+            background: var(--primary-gold);
+            color: #000000;
+            border: 2px solid var(--primary-gold);
+        }
+
+        .btn-secondary:hover {
+            background: transparent;
+        }
+
+        /* Menu Nav */
+        .menu-nav {
+            background: #FFFFFF;
+            padding: 30px 0;
+            position: sticky;
+            top: 70px;
+            z-index: 997;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-search {
+            position: sticky;
+            top: 70px;
+            z-index: 998;
+            background: #000000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .menu-search-bar input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            background: #111111;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--pure-white);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .menu-search-bar input:focus {
+            border-color: var(--primary-gold);
+            background: var(--pure-white);
+        }
+
+        .menu-search-bar i {
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-gold);
+            font-size: 0.9rem;
+        }
+
+        .menu-nav-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 30px;
+            padding: 0 5%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .menu-nav-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-nav a {
+            text-decoration: none;
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+
+        .menu-nav a.active, .menu-nav a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Sections */
+        section {
+            padding: 120px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 0 20px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--pure-white);
+            margin-bottom: 20px;
+        }
+
+        .section-header p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--primary-gold);
+            font-size: 1.1rem;
+        }
+
+        /* Menu Styles */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-category-card {
+            background: var(--bistro-green);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: none;
+            height: 100%;
+        }
+
+        .category-content {
+            padding: 35px 30px;
+        }
+
+        .category-title {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .menu-item {
+            margin-bottom: 18px;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .item-name {
+            font-weight: 800;
+            color: var(--text-dark);
+            font-size: 1.15rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .item-price {
+            font-weight: 800;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.4;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0.8;
+        }
+        /* About Section Revisited */
+        #about {
+            padding: 120px 0;
+            background: transparent;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: var(--pure-white);
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--pure-white);
+            margin-bottom: 30px;
+        }
+
+        .about-info {
+            display: grid;
+            gap: 20px;
+            color: var(--pure-white);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--pure-white);
+            font-weight: 500;
+        }
+
+        .info-item i {
+            color: var(--primary-gold);
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Menu Section Revisited */
+        #menu {
+            background: #000000;
+            padding: 120px 0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+            align-items: stretch;
+        }
+
+        .menu-category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Instagram Gallery */
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+        }
+
+        .insta-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .insta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .insta-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(212, 175, 55, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .insta-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+
+        /* Reviews Section */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .review-card {
+            background: #111111;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .review-card .stars {
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+
+        .review-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: var(--pure-white);
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-gold);
+        }
+
+        .author-info span {
+            font-size: 0.7rem;
+            color: var(--gray-text);
+        }
+
+        /* Location */
+        .location-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: transparent;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+
+        .location-details {
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Contact Form */
+        #contact {
+            background: #000000;
+            padding: 120px 0;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 100px;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 18px;
+            border: 1px solid #ddd;
+            color: var(--text-dark);
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-gold);
+            background: var(--charcoal);
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            color: var(--pure-white);
+            padding: 100px 0 50px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo img { height: 60px; margin-bottom: 30px; }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover { color: var(--primary-gold); transform: translateY(-3px); }
+
+        /* Payment Section */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .payment-card-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 420px;
+            height: 260px;
+            margin: 0 auto;
+        }
+
+        .payment-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .payment-card:hover, .payment-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            background: linear-gradient(to right bottom, #323941, #061018);
+            box-shadow: 0 33px 50px -15px rgba(50, 55, 63, .66);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .card-chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            border-radius: 5px;
+        }
+
+        .card-number-display {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin: 20px 0;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .card-info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .card-value {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-strip {
+            width: calc(100% + 60px);
+            height: 50px;
+            background: #000;
+            margin-left: -30px;
+            margin-top: 10px;
+        }
+
+        .card-cvv-display {
+            background: #fff;
+            color: #000;
+            padding: 10px;
+            text-align: right;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .payment-form-container {
+            background: rgba(30, 30, 30, 0.7);
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .payment-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .about-text h2 { font-size: 2.5rem; }
+            .about-info { justify-items: center; }
+            .location-container { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* Removed Cart UI Styles */
+
+        @media (max-width: 576px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+                padding: 20px;
+            }
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 992px) {
+            .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-content { padding: 40px 20px; }
+        }
+
+        .close-menu-btn { display: none; }
+
+        @media (max-width: 768px) {
+            header { height: 70px; }
+            .logo img { height: 50px; }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: #FFFFFF;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+                z-index: 1001;
+                box-shadow: -20px 0 40px rgba(0,0,0,0.1);
+                padding: 60px 20px;
+            }
+
+            .close-menu-btn {
+                display: block;
+                position: absolute;
+                top: 30px;
+                right: 30px;
+                background: transparent;
+                border: none;
+                color: var(--primary-gold);
+                font-size: 2.5rem;
+                cursor: pointer;
+                z-index: 1002;
+                line-height: 1;
+            }
+
+            nav.active {
+                right: 0;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                z-index: 1002;
+            }
+
+            .mobile-menu-btn span {
+                display: block;
+                width: 30px;
+                height: 3px;
+                background: var(--primary-gold);
+                transition: var(--transition);
+                border-radius: 2px;
+            }
+
+            .mobile-menu-btn.active span:nth-child(1) {
+                transform: translateY(9px) rotate(45deg);
+                background: var(--primary-gold);
+            }
+
+            .mobile-menu-btn.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .mobile-menu-btn.active span:nth-child(3) {
+                transform: translateY(-9px) rotate(-45deg);
+                background: var(--primary-gold);
+            }
+            
+            .menu-grid { grid-template-columns: 1fr; }
+            .section-header h2 { font-size: 2rem; }
+            .hero-content { padding: 30px 15px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-btns { flex-direction: column; gap: 15px; }
+            .btn-rounded { width: 100%; text-align: center; }
+            .bg-slide.active { opacity: 0.8; }
+            .bg-overlay { background: radial-gradient(circle at center, rgba(10, 10, 10, 0.12) 0%, rgba(10, 10, 10, 0.6) 100%); }
+        }
+
+        .mobile-menu-btn { display: none; }
+        @media (max-width: 768px) { .mobile-menu-btn { display: flex; } }
+
+    </style>
+</head>
+<body>
+
+<div class="bg-animation-container" id="bg-animation">
+    <div class="bg-image"></div>
+</div>
+
+<header>
+    <a href="#home" class="logo-text">
+        The Döner Mansion
+    </a>
+    <nav id="main-nav">
+        <button class="close-menu-btn" id="close-menu-btn">&times;</button>
+        <a href="#home">Accueil</a>
+        <a href="#menu">Menu</a>
+        <a href="#reviews">Avis</a>
+        <a href="#about">À propos</a>
+        <a href="#location">Localisation</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-btns">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+<section id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content reveal">
+        <h1>The Döner Mansion</h1>
+        <p>Modern Fast Food Concept in the heart of our City.</p>
+        <div class="hero-btns">
+            <a href="#menu" class="btn-rounded btn-primary">Notre Menu</a>
+            <a href="#contact" class="btn-rounded btn-secondary">Contactez-nous</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="reveal">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-text">
+                <h2>About Us</h2>
+                <p>The Döner Mansion brings authentic Berlin flavors to your plate with fresh ingredients, traditional recipes, and a warm welcoming atmosphere. Our skilled chefs craft each dish with care, honoring time-tested techniques while adapting to local tastes. Concept by The Burger Mansion.</p>
+                <div class="about-info">
+                    <div class="info-item"><i class="fas fa-map-marker-alt"></i> Hai El-Badr (A côté du Lycée Ammar Ben Yacine), Mascara</div>
+                    <div class="info-item"><i class="fas fa-phone"></i> 0796663395</div>
+                    <div class="info-item"><i class="fas fa-clock"></i> Ouvert à 11:30 AM</div>
+                </div>
+            </div>
+            <div class="about-img">
+                <img src="about.jpg.png" alt="About The Döner Mansion">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MENU SECTION -->
+<section id="menu" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <p>Our Menu</p>
+            <h2>Explore Our Menu</h2>
+        </div>
+        <div class="menu-search">
+            <div class="menu-search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="menu-search" placeholder="Rechercher un plat..." autocomplete="off">
+            </div>
+        </div>
+        <div class="menu-nav">
+            <div class="menu-nav-container" id="menu-categories">
+                <!-- Categories injected by JS -->
+            </div>
+        </div>
+        <div id="menu-container">
+            <!-- Menu items injected by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- REVIEWS SECTION -->
+<section id="reviews" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <p>What our customers say</p>
+            <h2>Customer Reviews</h2>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card reveal">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"J’ai testé le burger et c’était très bon. Produits frais de qualité et copieux. Pain brioché, la viande n’était pas grasse, les frites étaient extrêmement croustillantes."</p>
+                <div class="review-author">
+                    <span class="author-name">Sarra Khennas</span>
+                    <span class="review-date">il y a 5 mois</span>
+                </div>
+            </div>
+            <div class="review-card reveal" style="transition-delay: 0.1s;">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="review-text">"Surprisingly the one thing I really liked and enjoyed eating was the special fries they have adding meat hot peppers and cheese was so good."</p>
+                <div class="review-author">
+                    <span class="author-name">Rokia</span>
+                    <span class="review-date">il y a 8 mois</span>
+                </div>
+            </div>
+            <div class="review-card reveal" style="transition-delay: 0.2s;">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="review-text">"Concept très sympa, menu varié et prix corrects. Je recommande pour un repas savoureux et rapide."</p>
+                <div class="review-author">
+                    <span class="author-name">David Chen</span>
+                    <span class="review-date">il y a 3 mois</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LOCATION SECTION -->
+<section id="location" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <p>Visit Us</p>
+            <h2>Localisation</h2>
+        </div>
+        <div style="margin-top: 60px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); height: 450px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1598.6652233800645!2d2.9818844!3d36.741066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128faf9ddf4c82c3%3A0xebea291debe45ee2!2sThe%20Wall%20Snack%20%26%20Resto!5e0!3m2!1sen!2sdz!4v1710530400000!5m2!1sen!2sdz" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="reveal">
+    <div class="container">
+        <div class="section-header">
+            <p>Get in touch</p>
+            <h2>Contactez-nous</h2>
+        </div>
+        <form class="contact-form reveal">
+            <div class="form-group">
+                <input type="text" placeholder="Nom complet" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Votre message..." rows="6" required></textarea>
+            </div>
+            <button type="submit" class="btn-rounded btn-primary" style="width: 100%; cursor: pointer;">Envoyer le message</button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-logo">
+                <img src="logo.jpg" alt="The Döner Mansion Logo">
+                <p>Modern Fast Food Concept. Quality ingredients, exceptional taste.</p>
+            </div>
+            <div>
+                <h4>Navigation</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 12px;"><a href="#home" style="color: var(--text-dark); text-decoration: none;">Accueil</a></li>
+                    <li style="margin-bottom: 12px;"><a href="#menu" style="color: var(--text-dark); text-decoration: none;">Notre Menu</a></li>
+                    <li style="margin-bottom: 12px;"><a href="#reviews" style="color: var(--text-dark); text-decoration: none;">Avis Clients</a></li>
+                    <li style="margin-bottom: 12px;"><a href="#contact" style="color: var(--text-dark); text-decoration: none;">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Connect</h4>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/thedonermansion" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/213796663395" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 60px; color: var(--text-light); font-size: 0.8rem;">
+            &copy; 2026 THE DÖNER MANSION. ALL RIGHTS RESERVED.
+        </div>
+    </div>
+</footer>
+
+
+<script>
+    // Reveal Animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        revealObserver.observe(el);
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mainNav = document.getElementById('main-nav');
+
+    function toggleMenu(show) {
+        if (show) {
+            mobileMenuBtn.classList.add('active');
+            mainNav.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        } else {
+            mobileMenuBtn.classList.remove('active');
+            mainNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    mobileMenuBtn.addEventListener('click', () => {
+        const isActive = mainNav.classList.contains('active');
+        toggleMenu(!isActive);
+    });
+
+    closeMenuBtn.addEventListener('click', () => {
+        toggleMenu(false);
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuBtn.classList.remove('active');
+            mainNav.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    });
+
+    // Smooth Scroll with Offset
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const headerHeight = 150;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    }
+
+    // --- MENU MANAGEMENT SYSTEM ---
+    const menuData = [
+        {
+            category: "burger",
+            title: "BURGER",
+            image: "bg9.jpg.png",
+            items: [
+                { id: "mansion-classic", name: "The Mansion Classic", price: 700, description: "180g smash beef, 4 slices of cheese, classic sauce, lettuce, tomato, onion, ketchup, and artisanal pickles. (500/700 DA)" },
+                { id: "spicy-one", name: "The Spicy One", price: 750, description: "180g smash beef, 4 slices of cheese, spicy sauce, lettuce, onion & caramelized onion, and artisanal marinated chili. (550/750 DA)" },
+                { id: "smokey-bbq", name: "The Smokey Barbecue", price: 800, description: "180g smash beef, 4 slices of cheese, smoky sauce, caramelized onion, and breaded mozzarella. (600/800 DA)" },
+                { id: "nashville-chicken", name: "Nashville Chicken Burger", price: 700, description: "Breaded chicken, 2 slices of cheese, smoky sauce, coleslaw, and artisanal pickles." },
+                { id: "the-egg", name: "The Egg", price: 800, description: "180g beef, cheddar, lettuce, grilled tomatoes, egg, and classic sauce. (600/800 DA)" },
+                { id: "royal-cheese", name: "The Royal Cheese", price: 950, description: "180g beef, gruyère, camembert, caramelized onions, ketchup, and smoky sauce. (700/950 DA)" },
+                { id: "menu-kids", name: "Menu Kids", price: 750, description: "Cheeseburger, small fries, and a drink." }
+            ]
+        },
+        {
+            category: "pizza",
+            title: "PIZZA",
+            image: "bg8.jpg.png",
+            items: [
+                { id: "pizza-margherita", name: "Margherita", price: 700, description: "Tomato sauce, mozzarella, fresh basil, and olive oil." },
+                { id: "pizza-regina", name: "Regina", price: 850, description: "Tomato sauce, mozzarella, ham, and fresh mushrooms." },
+                { id: "pizza-4-fromages", name: "4 Fromages", price: 950, description: "Tomato sauce and a selection of four premium cheeses." },
+                { id: "pizza-orientale", name: "Orientale", price: 900, description: "Tomato sauce, mozzarella, merguez, peppers, and onions." }
+            ]
+        },
+        {
+            category: "doner",
+            title: "DÖNER",
+            image: "bg1.jpg.png",
+            note: "Berlin style street food",
+            items: [
+                { id: "doner-classic", name: "Döner Classic", price: 800, description: "180g döner, sautéed and seasoned vegetables (Berlin style), lettuce, tomato, onion, cucumber, mozzarella with herbs, herb sauce, and cocktail sauce." },
+                { id: "doner-spicy", name: "Döner Spicy & Strong", price: 800, description: "180g döner, sautéed and seasoned vegetables (Berlin style), lettuce, onion, marinated chili, red cabbage, mozzarella with herbs, herb sauce, cocktail sauce, and spicy sauce." },
+                { id: "durum-wrap", name: "Durum Wrap", price: 800, description: "Durum bread, 180g döner, sautéed and seasoned vegetables (Berlin style), lettuce, tomato, onion, cucumber, mozzarella with herbs, herb sauce, and cocktail sauce." }
+            ]
+        },
+        {
+            category: "assiettes",
+            title: "ASSIETTES (Platters)",
+            image: "bg2.jpg.png",
+            note: "New York Street Food Style",
+            items: [
+                { id: "chicken-over-rice", name: "Chicken Over Rice (NEW YORK)", price: 900, description: "Afghani rice, special chicken, herb sauce, spicy sauce, lettuce, tomato, onion, cucumber, and chickpeas. (600/900 DA)" },
+                { id: "fried-chicken-over-rice", name: "Fried Chicken Over Rice", price: 900, description: "Afghani rice, Nashville chicken, herb sauce, spicy sauce, sautéed vegetables, and marinated chili. (600/900 DA)" }
+            ]
+        },
+        {
+            category: "hot-wings",
+            title: "HOT WINGS",
+            image: "bg4.jpg.png",
+            note: "All orders include 5 pieces and ranch sauce.",
+            items: [
+                { id: "wings-nashville", name: "Nashville Spicy", price: 500, description: "5 pieces + ranch sauce" },
+                { id: "wings-lemon", name: "Lemon Garlic", price: 500, description: "5 pieces + ranch sauce" },
+                { id: "wings-buffalo", name: "Classic Buffalo", price: 500, description: "5 pieces + ranch sauce" },
+                { id: "wings-smokey", name: "Smokey BBQ", price: 500, description: "5 pieces + ranch sauce" }
+            ]
+        },
+        {
+            category: "frites-special",
+            title: "FRITES SPÉCIAL",
+            image: "bg5.jpg.png",
+            items: [
+                { id: "frites-poulet", name: "Frites Poulet", price: 450, description: "Fries, crispy chicken, marinated chili, onion, cheese sauce, and classic sauce." },
+                { id: "frites-cheese-doner", name: "Frites Cheese Döner", price: 450, description: "Fries, döner meat, caramelized onion, cheese sauce, and smoky sauce." },
+                { id: "frites-viande", name: "Frites Viande", price: 500, description: "Fries, 90g beef, caramelized onion, cheese sauce, and smoky sauce." },
+                { id: "frites-epicee", name: "Frites Épicée (Spicy Fries)", price: 200, description: "Spicy seasoned fries." },
+                { id: "frites-cheese", name: "Frites + Sauce Cheese", price: 250, description: "Fries with cheese sauce." }
+            ]
+        },
+        {
+            category: "sauces",
+            title: "NOS SAUCES",
+            image: "bg6.jpg.png",
+            items: [
+                { id: "sauce-herbe", name: "Sauce Herbe", price: 50, description: "" },
+                { id: "sauce-cocktail", name: "Sauce Cocktail", price: 50, description: "" },
+                { id: "sauce-spicy", name: "Sauce Spicy", price: 50, description: "" },
+                { id: "sauce-cheese", name: "Sauce Cheese", price: 50, description: "" }
+            ]
+        },
+        {
+            category: "boisson",
+            title: "BOISSON (Drinks)",
+            image: "bg7.jpg.png",
+            items: [
+                { id: "canette", name: "Canette (Soda Can)", price: 100, description: "" },
+                { id: "jus", name: "Jus (Juice)", price: 100, description: "" },
+                { id: "eau-minerale", name: "Eau Minérale (Mineral Water)", price: 50, description: "" }
+            ]
+        }
+    ];
+
+    const searchInput = document.getElementById('menu-search');
+
+    function renderMenu(searchTerm = '') {
+        const categoriesContainer = document.getElementById('menu-categories');
+        const menuContainer = document.getElementById('menu-container');
+        if (!categoriesContainer || !menuContainer) return;
+
+        let categoriesHTML = '';
+        let menuHTML = '';
+
+        const normalizedSearch = searchTerm.trim().toLowerCase();
+        const filteredCategories = menuData
+            .map((cat) => {
+                if (!normalizedSearch) return { ...cat };
+                const categoryMatch = (cat.title || '').toLowerCase().includes(normalizedSearch);
+                const items = cat.items.filter((item) => {
+                    const haystack = `${item.name} ${item.description}`.toLowerCase();
+                    return categoryMatch || haystack.includes(normalizedSearch);
+                });
+                return { ...cat, items };
+            })
+            .filter((cat) => cat.items && cat.items.length > 0);
+
+        filteredCategories.forEach((cat, index) => {
+            categoriesHTML += `<a href="#${cat.category}" class="${index === 0 ? 'active' : ''}">${cat.title}</a>`;
+            menuHTML += `
+                <div class="menu-category-card reveal" id="${cat.category}">
+                    <div class="category-content">
+                        <h3 class="category-title">${cat.title}</h3>
+                        ${cat.items.map(item => `
+                            <div class="menu-item">
+                                <div class="item-row">
+                                    <span class="item-name">${item.name}</span>
+                                    <span class="item-price">${item.price} DA</span>
+                                </div>
+                                ${item.description ? `<p class="item-desc">${item.description}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        });
+
+        categoriesContainer.innerHTML = categoriesHTML;
+        menuContainer.innerHTML = `<div class="menu-grid">${menuHTML}</div>`;
+
+        // Re-observe
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+    }
+
+    // --- SMOOTH SCROLL ---
+    initSmoothScroll();
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            renderMenu(e.target.value);
+        });
+    }
+
+    // Active Nav Link on Scroll
+    const header = document.querySelector('header');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+
+        let current = '';
+        const sections = document.querySelectorAll('section');
+        const mainNavLinks = document.querySelectorAll('#main-nav a');
+        const categoryLinks = document.querySelectorAll('#menu-categories a'); // Get category links
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.pageYOffset >= (sectionTop - 200)) { // Adjusted offset for better active state
+                current = section.getAttribute('id');
+            }
+        });
+
+        categoryLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Initial render
+    renderMenu();
+
+</script>
+</body>
+</html>
